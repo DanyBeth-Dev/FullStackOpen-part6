@@ -42,7 +42,7 @@ function App() {
           .then(deleteMessage)
           .catch(error => {
             setError(true)
-            setMessage(`The person ${event.target[0].value} was already deleted from server`);
+            setMessage(`The person ${event.target[0].value} was already deleted from server: `, error.response.data.error);
             deleteMessage()
             setPersons(persons.filter(p => p.id !== person.id))
           })
@@ -58,9 +58,14 @@ function App() {
           setPersons(persons.concat(returnedPerson))
           setNewName('');
           setNewNumber('');
+          setMessage(`${event.target[0].value} was added`);
+          deleteMessage();
         })
-        .then(setMessage(`${event.target[0].value} was added`))
-        .then(deleteMessage)
+        .catch(error => {
+          setError(true)
+          setMessage(error.response.data.error)
+          deleteMessage()
+        })
     }
   }
 
