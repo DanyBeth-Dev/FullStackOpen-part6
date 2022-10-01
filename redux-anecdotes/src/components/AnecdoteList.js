@@ -8,7 +8,7 @@ const AnecdoteList = (props) => {
 
   const voteAnecdote = async (id, content) => {
     props.voteAsyncAction(id)
-    props.setNotification(`you voted '${content}'`, 10)
+    props.setNotification(`you voted '${content}'`, 5)
   }
 
   let anecdotesToShow = props.filter ? props.filter : props.anecdotes
