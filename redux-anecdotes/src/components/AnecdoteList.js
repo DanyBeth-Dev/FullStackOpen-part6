@@ -4,16 +4,19 @@ import { voteAsyncAction } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = (props) => {
+  console.log(props)
 
   const voteAnecdote = async (id, content) => {
     props.voteAsyncAction(id)
     props.setNotification(`you voted '${content}'`, 10)
   }
 
+  let anecdotesToShow = props.filter ? props.filter : props.anecdotes
+
   return (
     <div>
       <h2>Anecdotes</h2>
-      {[...props.anecdotes].sort((a, b) => b.votes - a.votes).map(anecdote =>
+      {[...anecdotesToShow].sort((a, b) => b.votes - a.votes).map(anecdote =>
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>has {anecdote.votes}<button onClick={() => voteAnecdote(anecdote.id, anecdote.content)}>vote</button></div>
@@ -23,7 +26,15 @@ const AnecdoteList = (props) => {
   )
 }
 
-const mapStateToProps = state => state.filter.length === 0 ? state.anecdotes : state.filter
+// state.filter.length === 0 ? state.anecdotes : state.filter
+
+const mapStateToProps = state => {
+  if (state.filter.length === 0) {
+    return { anecdotes: state.anecdotes }
+  } else {
+    return { filter: state.filter}
+  }
+}
 
 const mapDispatchToProps = { voteAsyncAction, setNotification }
 
